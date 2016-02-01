@@ -13,7 +13,7 @@ def findPositions(wordInput, phraseInput, callback) :
 	sPhrasePosition = wordPosition + sWordPosition
 	return phrase, word, sPhrasePosition, callback(phrase, sPhrasePosition)
 
-#set up types of syllables(consonant, vowel, pause, otherCat#######!!!!!!!!!!!!!)
+#set up types of syllables
 consonants = set(['b', 'd', 'f', 'g', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z'])
 vowels = set(['a', 'e', 'i', 'o', 'u'])
 codes = {'c':'consonant', 'v':'vowel', 'p':'pause', 'i':'intervocalic'}
