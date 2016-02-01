@@ -16,41 +16,46 @@ def findPositions(wordInput, phraseInput, callback) :
 #set up types of syllables(consonant, vowel, pause, otherCat#######!!!!!!!!!!!!!)
 consonants = set(['b', 'd', 'f', 'g', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z'])
 vowels = set(['a', 'e', 'i', 'o', 'u'])
+codes = {'c':'consonant', 'v':'vowel', 'p':'pause', 'i':'intervocalic'}
 y = 'y'
 h = 'h'
 
 #determine syllables surrounding the s
 def codeSylls(phrase, sPhrasePosition) :
 	nextSyl = phrase[sPhrasePosition+1]
-	prevSyl = phrase[sPhrasePosition-1]
-	for syl in (nextSyl, prevSyl):
-		if syl == ' ':
-			syl = phrase[sPhrasePosition+2]
-			if syl == '#':
-				prevSylType = 'pause'
-			elif syl == 'h':
-				syl = phrase[sPhrasePosition+3]
-			if syl == 'c':
-				if 
-			if syl in consonants:
-				prevSylType = 'consonant'
-			elif syl in vowels:
-				prevSylType = 'vowel'
-		else:
-			prevSylType = 'intervocalic'
-		if 'nextSylType' not in locals():
-			nextSylType = prevSylType
-	return [nextSyl, nextSylType, prevSyl, prevSylType]
+	if nextSyl != ' ':
+		code = 'i'
+	else:
+		nextSyl = phrase[sPhrasePosition+2]
+		if nextSyl == 'h':
+			nextSyl = phrase[sPhrasePosition+3]
+			positn = sPhrasePosition + 1
+		if nextSyl == 'c':
+			if 'positn' in locals():
+				nxt = phrase[positn + 3]
+			else:
+				nxt = phrase[sPhrasePosition + 3]
+			if nxt == 'h':
+				nextSyl = 'C'
+			code = 'c'
+		if nextSyl in consonants:
+			code = 'c'
+		elif nextSyl in vowels:
+			code = 'v'
+		elif nextSyl == '#':
+			code = 'p'
+	return [nextSyl, code]
 
 
-def report(phrase, word, sWordPosition, nxAnPrvSyls) :
+def report(phrase, word, sWordPosition, nextSyl) :
 	print('Phrase "' + phrase + '" contains an "s" as the ' + str(sWordPosition+1) + 'th letter of the word "{}".'.format(word))
-	print('This "s" is followed by "{}", which is a {}, and preceeded by "{}", which is a {}.'.format(nxAnPrvSyls[0], nxAnPrvSyls[1], nxAnPrvSyls[2], nxAnPrvSyls[3]))
+	print('This "s" is followed by "{}", which is a {}.'.format(nextSyl[0], nextSyl[1]))
 
 def main() :
 	info = getInput(findPositions, codeSylls)
 	report(info[0], info[1], info[2], info[3])
 
 main()
+
 
 
