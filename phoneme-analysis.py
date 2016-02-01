@@ -11,24 +11,38 @@ def findPositions(wordInput, phraseInput, callback) :
 	phrase = phraseInput
 	wordPosition = phrase.find(word)
 	sPhrasePosition = wordPosition + sWordPosition
-	return phrase, word, sPhrasePosition, callback(phrase, sPhrasePosition)
+	return phrase, word, sWordPosition, callback(phrase, sPhrasePosition)
 
-#set up types of syllables
-consonants = set(['b', 'd', 'f', 'g', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z'])
-vowels = set(['a', 'e', 'i', 'o', 'u'])
-codes = {'c':'consonant', 'v':'vowel', 'p':'pause', 'i':'intervocalic'}
-y = 'y'
-h = 'h'
+#determine number of syllables in word
+def findNumOfSylls() :
+	wordLength = len(word)
+	if wordLength <= 2:
+		sylls = 'mono'
+	elif wordLength >= 5:
+		sylls = 'poly'
+	else:
+		sylls = 'idk???'
 
-#determine syllables surrounding the s
+
+#determine syllable after the s
 def codeSylls(phrase, sPhrasePosition) :
+	#set up types of syllables
+	consonants = set(['b', 'd', 'f', 'g', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z'])
+	vowels = set(['a', 'e', 'i', 'o', 'u'])
+	codes = {'c':'consonant', 'v':'vowel', 'p':'pause', 'i':'intervocalic'}
+	#where does nextSyl belong?
 	nextSyl = phrase[sPhrasePosition+1]
 	if nextSyl != ' ':
 		code = 'i'
 	else:
 		nextSyl = phrase[sPhrasePosition+2]
+		if nextSyl == 'y':
+			if phrase[sPhrasePosition+3] == ' ':
+				code = 'v'
+			else:
+				code = 'c'
 		if nextSyl == 'h':
-			nextSyl = phrase[sPhrasePosition+3]
+			code = 'v'
 			positn = sPhrasePosition + 1
 		if nextSyl == 'c':
 			if 'positn' in locals():
@@ -38,17 +52,17 @@ def codeSylls(phrase, sPhrasePosition) :
 			if nxt == 'h':
 				nextSyl = 'C'
 			code = 'c'
-		if nextSyl in consonants:
+		if nextSyl == '#':
+			code = 'p'
+		elif nextSyl in consonants:
 			code = 'c'
 		elif nextSyl in vowels:
 			code = 'v'
-		elif nextSyl == '#':
-			code = 'p'
 	return [nextSyl, code]
 
 
 def report(phrase, word, sWordPosition, nextSyl) :
-	print('Phrase "' + phrase + '" contains an "s" as the ' + str(sWordPosition+1) + 'th letter of the word "{}".'.format(word))
+	print('Phrase {} contains an "s" as the {}th letter of the word "{}".'.format(phrase, str(sWordPosition+1), word))
 	print('This "s" is followed by "{}", which is a {}.'.format(nextSyl[0], nextSyl[1]))
 
 def main() :
