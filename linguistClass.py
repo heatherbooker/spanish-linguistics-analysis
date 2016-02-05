@@ -1,4 +1,9 @@
 class Linguist() :
+
+	def __init__(self, phrase, word):
+		self.phrase = phrase
+		self.word = word
+
 	#determine number of syllables in word
 	def findNumOfSylls(word) :
 		wordLength = len(word)
@@ -47,5 +52,9 @@ class Linguist() :
 				code = 'v'
 			else:
 				code = '"uh oh, what is this?!"'
-		return [syl, code]
+		self.nextSyl = syl
+		self.nextSylCateg = code
+
+	def getNextSyl(self):
+		return self.nextSyl, self.nextSylCateg
 	
